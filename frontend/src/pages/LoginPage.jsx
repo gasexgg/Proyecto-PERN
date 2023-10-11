@@ -3,19 +3,24 @@ import { Card, Input, Button, Label } from "../components/ui";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 
-
 function LoginPege() {
   const { register, handleSubmit } = useForm();
-  const { signin } = useAuth();
+  const { signin, errors } = useAuth();
   const navigate = useNavigate();
-  const onSubmit = handleSubmit(async(data) => {
-    await signin(data);
-    navigate("/perfil");
+  const onSubmit = handleSubmit(async (data) => {
+    const user = await signin(data);
+    if (user) {
+      navigate("/perfil");
+    }
   });
 
   return (
     <div className="h-[calc(100vh-64px)] flex items-center justify-center">
       <Card>
+        {errors &&
+          errors.map((error) => (
+            <p className="bg-red-500 text-white p-2">{error}</p>
+          ))}
         <h1 className="text-4xl font-bold my-2 text-center">Inciar sesión</h1>
 
         <form onSubmit={onSubmit}>
