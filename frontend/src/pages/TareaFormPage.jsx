@@ -12,7 +12,7 @@ function TareaFormPage() {
     setValue,
   } = useForm();
   const params = useParams();
-  console.log(params);
+
   const navigate = useNavigate();
 
   const {
