@@ -4,21 +4,23 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 
 function LoginPege() {
-  const { register, handleSubmit } = useForm();
-  const { signin, errors } = useAuth();
+  const { register, handleSubmit, formState: {
+    errors
+  } } = useForm();
+  const { signin, errors: loginErrros } = useAuth();
   const navigate = useNavigate();
   const onSubmit = handleSubmit(async (data) => {
     const user = await signin(data);
     if (user) {
-      navigate("/perfil");
+      navigate("/tareas");
     }
   });
 
   return (
     <Container className="h-[calc(100vh-10rem)] flex items-center justify-center">
       <Card>
-        {errors &&
-          errors.map((error) => (
+        {loginErrros &&
+          loginErrros.map((error) => (
             <p className="bg-red-500 text-white p-2">{error}</p>
           ))}
         <h1 className="text-4xl font-bold my-2 text-center">Inciar sesión</h1>
@@ -32,6 +34,9 @@ function LoginPege() {
               required: true,
             })}
           ></Input>
+          {
+            errors.email && <p className="text-red-500">Este campo es requerido</p>
+          }
           <Label htmlFor="password">Contraseña</Label>
           <Input
             type="password"
@@ -40,10 +45,13 @@ function LoginPege() {
               required: true,
             })}
           ></Input>
+          {
+            errors.password && <p className="text-red-500">Este campo es requerido</p>
+          }
           <Button>Ingresar</Button>
         </form>
         <div className=" flex justify-between my-4">
-          <p>¿No tienes cuenta?</p>
+          <p className="mr-4">¿No tienes cuenta?</p>
           <Link to="/register">Registrate</Link>
         </div>
       </Card>

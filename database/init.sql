@@ -6,6 +6,9 @@ CREATE TABLE tareas (
 
 ALTER TABLE tareas ADD COLUMN usuario_id INTEGER REFERENCES usuarios(id);
 
+--remove unique from titulo
+ALTER TABLE tareas DROP CONSTRAINT tareas_titulo_key;
+
 
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,

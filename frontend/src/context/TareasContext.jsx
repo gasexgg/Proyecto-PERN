@@ -3,6 +3,8 @@ import {
   listarTareasRequest,
   eliminarTareaRequest,
   crearTareaRequest,
+  actualizarTareaRequest,
+  listarTareaRequest
 } from "../api/tareas.api";
 
 const TareasContext = createContext();
@@ -26,6 +28,12 @@ export const TareasProvider = ({ children }) => {
     setTareas(res.data);
   };
 
+  const cargarTarea = async (id, tarea) => {
+    const res = await listarTareaRequest(id, tarea);
+    return res.data;
+  };
+
+
   const crearTarea = async (tarea) => {
     try {
       const res = await crearTareaRequest(tarea);
@@ -45,6 +53,17 @@ export const TareasProvider = ({ children }) => {
     }
   };
 
+  const editarTarea = async (id, tarea) => {
+    try {
+      const res = await actualizarTareaRequest(id, tarea);
+      return res.data;
+    } catch (error) {
+      if (error.response) {
+        setError([error.response.data.message]);
+      }
+    }
+    }
+
   return (
     <TareasContext.Provider
       value={{
@@ -52,6 +71,9 @@ export const TareasProvider = ({ children }) => {
         cargarTareas,
         eliminarTarea,
         crearTarea,
+        cargarTarea,
+        errors,
+        editarTarea,
       }}
     >
       {children}
